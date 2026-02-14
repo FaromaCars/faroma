@@ -69,7 +69,7 @@ const HomeReview = () => {
         navigation
         speed={2000}
         loop={true}
-        autoplay={{ delay: 4500, disableOnInteraction: false }}
+        autoplay={{ delay: 3500, disableOnInteraction: false }}
         breakpoints={{
           0: { slidesPerView: 1 },
           640: { slidesPerView: 2 },

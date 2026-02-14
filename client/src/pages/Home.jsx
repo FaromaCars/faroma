@@ -12,14 +12,17 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import { Brands } from "../api/brands";
 import HomeReview from "../components/HomeReview";
+import Preloader from "../components/Preloader";
 
 export default function Home() {
   const [cars, setCars] = useState([]);
   const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true); // ✅ loading state
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true); // start loading
 
         // Fetch featured cars
         const carsRes = await fetch("/api/cars?featured=true");
@@ -27,19 +30,26 @@ export default function Home() {
         setCars(carsData);
 
         // Fetch latest 4 blogs
-        const newsRes = await fetch(`/api/blogs?limit=4`);
+        const newsRes = await fetch(`/api/blogs`);
         const newsData = await newsRes.json();
-        setNews(newsData);
+        const shuffledNews = [...newsData] 
+          .sort(() => Math.random() - 0.5) // shuffle randomly
+          .slice(0, 4); // take first 4 items
+
+        setNews(shuffledNews);
       } catch (err) {
         console.log(err);
         toast.error("Failed to load data");
-      } 
+      } finally {
+        setLoading(false); // stop loading
+      }
     };
 
     fetchData();
   }, []);
 
-   
+  if (loading) return <Preloader />;
+
   return (
     <div className="relative">
       {/* Hero Section */}
@@ -67,7 +77,7 @@ export default function Home() {
           <div className="flex gap-5">
             <Link
               to="/new-cars"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300"
+              className="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300"
             >
               Browse New Cars
             </Link>
@@ -181,7 +191,9 @@ export default function Home() {
                   </h3>
                   <p className="text-gray-600">Year: {car.year}</p>
                   <p className="text-gray-600">Color: {car.color}</p>
-                  <p className="font-bold text-lg mt-2 text-blue-600">AED {car.price}</p>
+                  <p className="font-bold text-lg mt-2 text-blue-600">
+                    AED {car.price}
+                  </p>
                 </Link>
               </SwiperSlide>
             ))}
@@ -261,7 +273,7 @@ export default function Home() {
 
       <div className="container mx-auto p-5">
         <h2 className="text-2xl md:text-4xl font-semibold mb-3 text-center text-gray-700">
-           Faroma Car News
+          Faroma Car News
         </h2>
         <span className="block w-40 h-1 bg-gray-700 mx-auto rounded mb-6"></span>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-6 ">
