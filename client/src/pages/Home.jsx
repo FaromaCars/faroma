@@ -12,17 +12,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import { Brands } from "../api/brands";
 import HomeReview from "../components/HomeReview";
-import Preloader from "../components/Preloader";
 
 export default function Home() {
   const [cars, setCars] = useState([]);
   const [news, setNews] = useState([]);
-const [loading, setLoading] = useState(true); // ✅ loading state
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true); // start loading
 
         // Fetch featured cars
         const carsRes = await fetch("/api/cars?featured=true");
@@ -36,15 +33,12 @@ const [loading, setLoading] = useState(true); // ✅ loading state
       } catch (err) {
         console.log(err);
         toast.error("Failed to load data");
-      } finally {
-        setLoading(false); // stop loading
-      }
+      } 
     };
 
     fetchData();
   }, []);
 
-   if (loading) return <Preloader />;
    
   return (
     <div className="relative">
