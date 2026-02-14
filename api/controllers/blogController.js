@@ -8,10 +8,11 @@ import streamifier from "streamifier";
 const uploadToCloudinary = (file) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
-      { folder: "faroma_blogs",
-        quality: "auto",        // compress for web
-        fetch_format: "auto"
-       },
+      {
+        folder: "faroma_blogs",
+        quality: "auto",
+        fetch_format: "auto",
+      },
       (error, result) => {
         if (result) resolve(result);
         else reject(error);
@@ -56,7 +57,6 @@ export const addBlog = async (req, res) => {
   }
 };
 
-
 //////////////////////////////////////////////////////////////
 // GET ALL BLOGS (Latest / Oldest)
 //////////////////////////////////////////////////////////////
@@ -65,13 +65,11 @@ export const getBlogs = async (req, res) => {
     const { sort } = req.query;
 
     let query = Blog.find();
-    const limit = parseInt(req.query.limit) || 4;
-    // latest → newest first
-    if (sort === "latest") query.sort({ createdAt: -1 });
 
-    // oldest → oldest first
-    if (sort === "oldest") query.sort({ createdAt: 1 });
-    query = query.limit(limit);
+    // Default latest first
+    if (!sort || sort === "latest") query.sort({ createdAt: -1 });
+    else if (sort === "oldest") query.sort({ createdAt: 1 });
+
     const blogs = await query;
     res.json(blogs);
   } catch (err) {
@@ -92,7 +90,6 @@ export const getSingleBlog = async (req, res) => {
     res.status(500).json("Invalid blog ID");
   }
 };
-
 
 //////////////////////////////////////////////////////////////
 // DELETE BLOG + CLOUDINARY IMAGE
@@ -131,7 +128,6 @@ export const updateBlog = async (req, res) => {
 
     // If new image uploaded → delete old + upload new
     if (req.file) {
-      // delete old image
       if (existingBlog.image) {
         const parts = existingBlog.image.split("/");
         const fileName = parts[parts.length - 1];
@@ -139,7 +135,6 @@ export const updateBlog = async (req, res) => {
         await cloudinary.uploader.destroy(publicId);
       }
 
-      // upload new image
       const result = await uploadToCloudinary(req.file);
       imageUrl = result.secure_url;
     }
@@ -160,4 +155,3 @@ export const updateBlog = async (req, res) => {
     res.status(500).json("Failed to update blog");
   }
 };
-

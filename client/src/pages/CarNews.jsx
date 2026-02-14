@@ -3,19 +3,17 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Preloader from "../components/Preloader";
 
-// Simple preloader component
-
-
 export default function CarNews() {
   const [blogs, setBlogs] = useState([]);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
-  const [sort, setSort] = useState("latest"); // latest / oldest
+  const [sort, setSort] = useState("latest"); // default latest
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(true); // ✅ loading state
+  const [loading, setLoading] = useState(true);
 
+  // fetch blogs from backend
   const fetchBlogs = async () => {
     try {
-      setLoading(true); // show preloader
+      setLoading(true);
       const res = await fetch(`/api/blogs?sort=${sort}`);
       const data = await res.json();
       setBlogs(data);
@@ -27,14 +25,16 @@ export default function CarNews() {
     } catch (err) {
       toast.error("Failed to fetch blogs");
     } finally {
-      setLoading(false); // hide preloader
+      setLoading(false);
     }
   };
 
+  // fetch whenever sort changes
   useEffect(() => {
     fetchBlogs();
   }, [sort]);
 
+  // filter whenever search changes
   useEffect(() => {
     setFilteredBlogs(
       blogs.filter((blog) =>
@@ -83,7 +83,7 @@ export default function CarNews() {
         {/* BLOG GRID */}
         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {loading ? (
-            <Preloader /> // ✅ show preloader while fetching
+            <Preloader />
           ) : filteredBlogs.length > 0 ? (
             filteredBlogs.map((blog) => (
               <div

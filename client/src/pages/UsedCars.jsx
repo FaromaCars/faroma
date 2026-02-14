@@ -186,7 +186,7 @@ export default function UsedCars() {
                   {currentCars.map(car => (
                     <Link key={car._id} to={`/cars/${car._id}`} className="border p-4 rounded-xl shadow hover:shadow-xl bg-white">
                       <img src={car.images?.[0] || "/placeholder.png"} className="h-48 w-full object-cover rounded"/>
-                      <h2 className="text-xl font-semibold mt-2">{car.carName}</h2>
+                      <h2 className="text-xl font-semibold mt-2">{car.brand} {car.carName}</h2>
                       <p>Year: {car.year}</p>
                       <p>Fuel: {car.fuelType}</p>
                       <p>KM: {car.kilometer}</p>

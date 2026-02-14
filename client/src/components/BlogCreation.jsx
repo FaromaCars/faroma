@@ -22,12 +22,12 @@ export default function BlogCreation() {
 
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Editor toolbar config
   const editorConfig = {
     readonly: false,
     height: 250,
-
     buttons: [
       "bold",
       "italic",
@@ -40,29 +40,21 @@ export default function BlogCreation() {
       "|",
       "undo",
       "redo",
-      "|",
     ],
-
     toolbarAdaptive: false,
     showCharsCounter: false,
     showWordsCounter: false,
     showXPathInStatusbar: false,
-
-    // 🔥 VERY IMPORTANT → Fix paste issue
     askBeforePasteHTML: false,
     askBeforePasteFromWord: false,
     defaultActionOnPaste: "insert_clear_html",
-
     pastePlain: false,
     pasteFromWordRemoveStyles: false,
-
-    uploader: {
-      insertImageAsBase64URI: true,
-    },
+    uploader: { insertImageAsBase64URI: true },
   };
 
   //////////////////////////////////////////////////////
-  // AUTH CHECK
+  // AUTH + INITIAL FETCH
   //////////////////////////////////////////////////////
   useEffect(() => {
     if (!token) navigate("/admin/login");
@@ -74,9 +66,13 @@ export default function BlogCreation() {
   //////////////////////////////////////////////////////
   const fetchBlogs = async () => {
     try {
-      const res = await fetch("/api/blogs");
+      const res = await fetch("/api/blogs", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Failed to fetch blogs");
       const data = await res.json();
       setBlogs(data);
+      setCurrentPage(1); // reset pagination after fetch
     } catch (err) {
       toast.error("Failed to fetch blogs");
     }
@@ -92,16 +88,12 @@ export default function BlogCreation() {
     const file = e.target.files[0];
     if (!file) return;
 
-    // ✅ Max size = 300KB
-    const maxSize = 400 * 1024; // bytes
-
+    const maxSize = 300 * 1024; // 300KB
     if (file.size > maxSize) {
-      toast.error("Image must be less than 400KB");
-      e.target.value = ""; // reset input
+      toast.error("Image must be less than 300KB");
+      e.target.value = "";
       return;
     }
-
-    // Optional: allow only images
     if (!file.type.startsWith("image/")) {
       toast.error("Only image files allowed");
       e.target.value = "";
@@ -117,15 +109,17 @@ export default function BlogCreation() {
   //////////////////////////////////////////////////////
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!form.title || !form.description || !form.content) {
+      return toast.error("All fields are required");
+    }
 
     const formData = new FormData();
     formData.append("title", form.title);
     formData.append("description", form.description);
     formData.append("content", form.content);
-
     if (image) formData.append("image", image);
-    if (editId) formData.append("existingImage", preview);
 
+    setLoading(true);
     try {
       const url = editId ? `/api/blogs/${editId}` : "/api/blogs/add";
       const method = editId ? "PUT" : "POST";
@@ -136,7 +130,7 @@ export default function BlogCreation() {
         body: formData,
       });
 
-      if (!res.ok) throw new Error("Failed");
+      if (!res.ok) throw new Error("Operation failed");
 
       toast.success(editId ? "Blog Updated" : "Blog Added");
 
@@ -146,8 +140,10 @@ export default function BlogCreation() {
       setEditId(null);
 
       fetchBlogs();
-    } catch {
-      toast.error("Operation failed");
+    } catch (err) {
+      toast.error(err.message || "Operation failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -161,22 +157,26 @@ export default function BlogCreation() {
       description: blog.description,
       content: blog.content,
     });
-    setPreview(blog.image);
+    setPreview(blog.image || "");
+    setCurrentPage(1); // optional: reset pagination
   };
 
   //////////////////////////////////////////////////////
   // DELETE BLOG
   //////////////////////////////////////////////////////
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete blog?")) return;
-
-    await fetch(`/api/blogs/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    toast.success("Deleted");
-    fetchBlogs();
+    if (!window.confirm("Delete this blog?")) return;
+    try {
+      const res = await fetch(`/api/blogs/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Delete failed");
+      toast.success("Deleted successfully");
+      fetchBlogs();
+    } catch (err) {
+      toast.error(err.message || "Delete failed");
+    }
   };
 
   //////////////////////////////////////////////////////
@@ -232,11 +232,17 @@ export default function BlogCreation() {
           onChange={handleImage}
           className="mt-4 mb-2"
         />
-        <p className="text-sm text-green-500 mb-4">Max image size: 400KB</p>
+        <p className="text-sm text-green-500 mb-4">Max image size: 300KB</p>
 
-        {preview && <img src={preview} className="w-32 mb-4 rounded" />}
+        {preview && (
+          <img src={preview} alt="preview" className="w-32 mb-4 rounded" />
+        )}
 
-        <button className="bg-blue-600 text-white px-6 py-2 rounded">
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
+        >
           {editId ? "Update Blog" : "Add Blog"}
         </button>
       </form>
@@ -254,30 +260,42 @@ export default function BlogCreation() {
             </tr>
           </thead>
           <tbody className="my-4">
-            {currentBlogs.map((blog) => (
-              <tr key={blog._id} className="border-b ">
-                <td>
-                  <img src={blog.image} className="w-20 mx-auto py-3" />
-                </td>
-                <td>{blog.title.slice(0,40) + "..."}</td>
-                <td>{blog.description.slice(0,70) + "..."}</td>
-                <td>{new Date(blog.createdAt).toLocaleDateString()}</td>
-                <td className="space-x-2">
-                  <button
-                    onClick={() => handleEdit(blog)}
-                    className="bg-green-500 text-white px-3 py-1 rounded"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(blog._id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded"
-                  >
-                    Delete
-                  </button>
+            {currentBlogs.length > 0 ? (
+              currentBlogs.map((blog) => (
+                <tr key={blog._id} className="border-b">
+                  <td>
+                    <img
+                      src={blog.image || "/placeholder.png"}
+                      className="w-20 mx-auto py-3"
+                      alt={blog.title}
+                    />
+                  </td>
+                  <td>{blog.title.slice(0, 40) + (blog.title.length > 40 ? "..." : "")}</td>
+                  <td>{blog.description.slice(0, 70) + (blog.description.length > 70 ? "..." : "")}</td>
+                  <td>{new Date(blog.createdAt).toLocaleDateString()}</td>
+                  <td className="space-x-2">
+                    <button
+                      onClick={() => handleEdit(blog)}
+                      className="bg-green-500 text-white px-3 py-1 rounded"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(blog._id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5} className="py-4 text-gray-600">
+                  No blogs found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
 
@@ -288,7 +306,9 @@ export default function BlogCreation() {
               key={i}
               onClick={() => setCurrentPage(i + 1)}
               className={`px-3 py-1 rounded ${
-                currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-gray-300"
+                currentPage === i + 1
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-300"
               }`}
             >
               {i + 1}
