@@ -12,6 +12,7 @@ import FooterCom from "./components/FooterComp";
 import CarNews from "./pages/CarNews";
 import CarNewsDetails from "./pages/CarNewsDetails";
 import ScrollToTop from "./components/ScrollToTop";
+import About from "./pages/About";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about-us" element={<About />} />
         <Route path="/cars/:id" element={<CarDetails />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/new-cars" element={<NewCars />} />

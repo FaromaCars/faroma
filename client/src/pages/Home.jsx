@@ -13,6 +13,7 @@ import { Navigation, Autoplay } from "swiper/modules";
 import { Brands } from "../api/brands";
 import HomeReview from "../components/HomeReview";
 import Preloader from "../components/Preloader";
+import {Vehicles} from '../api/vehicles'
 
 export default function Home() {
   const [cars, setCars] = useState([]);
@@ -202,6 +203,42 @@ export default function Home() {
       </div>
       {/* Cars Section Ends */}
 
+      {/* Car Types */}
+      <h2 className="text-2xl md:text-4xl font-semibold mb-3 text-center text-gray-700">
+                We Provide All Type of Vehicles
+              </h2>
+              
+              <span className="block w-40 h-1 bg-gray-700 mx-auto rounded mb-6"></span>
+              <Swiper
+                modules={[Navigation, Autoplay]}
+                spaceBetween={20}
+                navigation
+                speed={4000}
+                loop={true}
+                allowTouchMove={true}
+                autoplay={{ delay: false, disableOnInteraction: false }}
+                breakpoints={{
+                  0: { slidesPerView: 2 },
+                  640: { slidesPerView: 4 },
+                  1024: { slidesPerView: 5 },
+                }}
+                className="carSwiper container"
+              >
+                {Vehicles.map((vehicle) => (
+                  <SwiperSlide key={vehicle._id}>
+                    <div className="p-4 rounded-xl transition duration-300 bg-white block">
+                      <img
+                        src={vehicle.image || "/placeholder.png"}
+                        className="rounded-lg w-auto "
+                      />
+                      <p className="text-center font-semibold text-xl">{vehicle.name}</p>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+
+      {/* Car Types End */}
+
       {/* Services */}
       <div id="" className="p-8 mx-auto py-8 container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 m-auto items-center">
@@ -236,7 +273,7 @@ export default function Home() {
       </div>
       {/* Services Ends*/}
 
-      {/* Services */}
+      {/* Brands */}
       <div id="cars" className="p-6 container mx-auto mt-6">
         <h2 className="text-2xl md:text-4xl font-semibold mb-3 text-center text-gray-700">
           Popular Car Brands in UAE
@@ -269,7 +306,7 @@ export default function Home() {
           ))}
         </Swiper>
       </div>
-      {/* Services Ends*/}
+      {/* Brands Ends*/}
 
       <div className="container mx-auto p-5">
         <h2 className="text-2xl md:text-4xl font-semibold mb-3 text-center text-gray-700">
