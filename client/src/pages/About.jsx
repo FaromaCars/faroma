@@ -12,6 +12,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import {Vehicles} from '../api/vehicles'
 import { Brands } from "../api/brands";
+import Feedback from "../components/Feedback";
 
 export default function AboutUs() {
   return (
@@ -228,6 +229,7 @@ export default function AboutUs() {
         </Swiper>
       </div>
       
+      <Feedback />
     </div>
   );
 }

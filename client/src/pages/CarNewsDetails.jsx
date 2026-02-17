@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Feedback from "../components/Feedback";
 
 export default function CarNewsDetails() {
   const { id } = useParams(); // get blog id from URL
@@ -49,7 +50,7 @@ export default function CarNewsDetails() {
         <img
           src={blog.image}
           alt={blog.title}
-          className="w-full h-auto object-cover"
+          className="w-auto h-auto object-contain mx-auto rounded-lg shadow-md"
         />
 
         {/* BLOG CONTENT */}
@@ -71,6 +72,8 @@ export default function CarNewsDetails() {
           </Link>
         </div>
       </div>
+
+      <Feedback />
     </div>
   );
 }

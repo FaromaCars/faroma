@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Preloader from "../components/Preloader";
+import Feedback from "../components/Feedback";
 
 export default function CarNews() {
   const [blogs, setBlogs] = useState([]);
@@ -127,6 +128,8 @@ export default function CarNews() {
           )}
         </div>
       </div>
+
+      <Feedback />
     </div>
   );
 }

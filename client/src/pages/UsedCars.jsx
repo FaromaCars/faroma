@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Preloader from "../components/Preloader";
+import Feedback from "../components/Feedback";
 
 export default function UsedCars() {
   const carsPerPage = 20;
@@ -217,6 +218,8 @@ export default function UsedCars() {
 
         </div>
       </div>
+
+      <Feedback />
     </div>
   );
 }

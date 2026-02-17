@@ -14,6 +14,7 @@ import { Brands } from "../api/brands";
 import HomeReview from "../components/HomeReview";
 import Preloader from "../components/Preloader";
 import {Vehicles} from '../api/vehicles'
+import Feedback from "../components/Feedback";
 
 export default function Home() {
   const [cars, setCars] = useState([]);
@@ -353,6 +354,7 @@ export default function Home() {
       </div>
 
       <HomeReview />
+      <Feedback />
     </div>
   );
 }

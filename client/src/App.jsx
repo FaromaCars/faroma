@@ -12,6 +12,7 @@ import FooterCom from "./components/FooterComp";
 import CarNews from "./pages/CarNews";
 import CarNewsDetails from "./pages/CarNewsDetails";
 import ScrollToTop from "./components/ScrollToTop";
+import HeaderMarquee from "./components/HeaderMarquee";
 import About from "./pages/About";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
     <BrowserRouter>
         <ScrollToTop />
         <ToastContainer position="top-right" autoClose={3000} />
+        <HeaderMarquee />
         <Header />
       <Routes>
         <Route path="/" element={<Home />} />

@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Preloader from "../components/Preloader";
+import Feedback from "../components/Feedback";
 
 export default function NewCars() {
   const carsPerPage = 20;
@@ -211,12 +212,15 @@ export default function NewCars() {
                     <button onClick={()=>setCurrentPage(p=>p+1)} disabled={currentPage===totalPages} className="px-4 py-2 border rounded">Next</button>
                   </div>
                 )}
+
               </>
             )}
           </div>
 
         </div>
       </div>
+      
+      <Feedback />
     </div>
   );
 }
