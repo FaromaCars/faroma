@@ -181,12 +181,12 @@ export default function Home() {
               <SwiperSlide key={car._id}>
                 <Link
                   to={`/cars/${car._id}`}
-                  className="border p-4 rounded-xl shadow hover:shadow-lg transition duration-300 bg-white block"
+                  className="border p-4 rounded-xl shadow overflow-hidden bg-white block"
                 >
                   <img
                     src={car.images?.[0] || "/placeholder.png"}
                     alt={`${car.brand} ${car.model}`}
-                    className="rounded-lg mb-3 w-full h-48 object-cover"
+                    className="rounded-lg mb-3 w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
                   />
                   <h3 className="text-xl font-semibold">
                     {car.brand} {car.model}

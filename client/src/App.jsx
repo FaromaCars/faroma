@@ -14,6 +14,7 @@ import CarNewsDetails from "./pages/CarNewsDetails";
 import ScrollToTop from "./components/ScrollToTop";
 import HeaderMarquee from "./components/HeaderMarquee";
 import About from "./pages/About";
+import Wishlist from "./components/Wishlist";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about-us" element={<About />} />
+        <Route path="/wish-list" element={<Wishlist />} />
         <Route path="/cars/:id" element={<CarDetails />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/new-cars" element={<NewCars />} />

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Preloader from "../components/Preloader"; // ✅ Import your preloader
+import { BsHeartFill } from "react-icons/bs";
+import { toast } from "react-toastify";
 
 export default function CarDetails() {
   const { id } = useParams();
@@ -8,6 +10,7 @@ export default function CarDetails() {
   const [loading, setLoading] = useState(true);
   const [mainImage, setMainImage] = useState("");
   const [relatedCars, setRelatedCars] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     const fetchCar = async () => {
@@ -25,7 +28,6 @@ export default function CarDetails() {
         const relatedRes = await fetch(`/api/cars?brand=${data.brand}&limit=6`);
         const relatedData = await relatedRes.json();
         setRelatedCars(relatedData.filter((c) => c._id !== id));
-
       } catch (err) {
         console.log(err);
       } finally {
@@ -34,14 +36,40 @@ export default function CarDetails() {
     };
 
     fetchCar();
+
+    const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+
+    if (favorites.find((item) => item._id === id)) {
+      setIsFavorite(true);
+    } else {
+      setIsFavorite(false);
+    }
   }, [id]);
 
+  const toggleFunction = () => {
+    const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+
+    if (isFavorite) {
+      const updated = favorites.filter((item) => item._id !== car._id);
+      localStorage.setItem("favorites", JSON.stringify(updated));
+      setIsFavorite(false);
+      toast.success("Removed from Wishlist", { theme: "colored" });
+    } else {
+      favorites.push(car);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+      setIsFavorite(true);
+      toast.success("Added to Wishlist", { theme: "colored" });
+    }
+    window.dispatchEvent(new Event("storage"));
+  };
+
   // ------------------ Preloader while loading ------------------
-  if (loading) return (
-    <div className="flex justify-center items-center h-96">
-      <Preloader />
-    </div>
-  );
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-96">
+        <Preloader />
+      </div>
+    );
 
   if (!car) return <p className="text-center mt-20">Car not found</p>;
 
@@ -77,23 +105,28 @@ export default function CarDetails() {
   // ------------------ Render Car Details ------------------
   return (
     <div className="p-4 md:p-8 container mx-auto space-y-8">
-
       {/* Breadcrumbs */}
       <nav className="text-gray-500 text-sm">
-        <Link to="/" className="hover:underline">Home</Link> /{" "}
+        <Link to="/" className="hover:underline">
+          Home
+        </Link>{" "}
+        /{" "}
         {car.condition === "NEW" ? (
-          <Link to="/new-cars" className="hover:underline">Cars</Link>
+          <Link to="/new-cars" className="hover:underline">
+            Cars
+          </Link>
         ) : (
-          <Link to="/used-cars" className="hover:underline">Cars</Link>
+          <Link to="/used-cars" className="hover:underline">
+            Cars
+          </Link>
         )}
         {" / "}
         <span className="text-gray-700">{car.carName}</span>
       </nav>
 
-      <div className="flex flex-col lg:flex-row gap-6">
-
+      <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
         {/* Images */}
-        <div className="lg:w-1/2 space-y-3">
+        <div className="lg:w-1/2 space-y-3 lg:sticky lg:top-32 self-start">
           <img
             src={mainImage}
             alt={car.carName}
@@ -120,36 +153,58 @@ export default function CarDetails() {
         <div className="lg:w-1/2 bg-white p-6 rounded shadow space-y-6">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-4xl font-bold">{car.carName}</h1>
-              <span className="bg-gray-200 px-3 py-1 rounded text-sm">{car.condition}</span>
+              <h1 className="text-4xl font-bold">
+                {car.brand} {car.carName}
+              </h1>
+              <span className="bg-gray-200 px-3 py-1 rounded text-sm">
+                {car.condition}
+              </span>
             </div>
             {car.price ? (
-              <p className="text-4xl text-blue-600 font-bold mt-3">AED {car.price.toLocaleString()}</p>
+              <p className="text-4xl text-blue-600 font-bold mt-3">
+                AED {car.price.toLocaleString()}
+              </p>
             ) : (
               <p className="text-4xl text-red-600 font-bold mt-3">Sold Out</p>
             )}
-            <p className="text-gray-700 mt-3">{car.description}</p>
           </div>
 
           {/* Specs */}
           <div className="grid grid-cols-2 gap-4">
-            <Spec title="Brand" value={car.brand}/>
-            <Spec title="Year" value={car.year}/>
-            <Spec title="Mileage" value={`${car.kilometer} km`}/>
-            <Spec title="Fuel" value={car.fuelType}/>
-            <Spec title="Type" value={car.vehicleType}/>
-            <Spec title="Transmission" value={car.transmission}/>
-            <Spec title="Seating" value={car.seating}/>
-            <Spec title="Color" value={car.color}/>
+            <Spec title="Brand" value={car.brand} />
+            <Spec title="Year" value={car.year} />
+            <Spec title="Mileage" value={`${car.kilometer} km`} />
+            <Spec title="Fuel" value={car.fuelType} />
+            <Spec title="Type" value={car.vehicleType} />
+            <Spec title="Transmission" value={car.transmission} />
+            <Spec title="Seating" value={car.seating} />
+            <Spec title="Color" value={car.color} />
+            <p className="text-gray-700 mt-3">{car.description}</p> <br />
+            <div
+              onClick={toggleFunction}
+              className={`${isFavorite ? "text-green-600" : "text-red-600"} flex items-center justify-start font-semibold gap-2 w-full cursor-pointer`}
+            >
+              <p>{isFavorite ? "Remove from Wishlist" : "Add to Wishlist"}</p>
+              <BsHeartFill />
+            </div>
           </div>
 
           {/* Buttons */}
-          <button onClick={handleEmailEnquiry} className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 w-full">
-            Enquire via Email
-          </button>
-          <button onClick={handleWhatsAppEnquiry} className="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 w-full">
-            Enquire via WhatsApp
-          </button>
+
+          <div className="flex flex-col lg:flex-row gap-6">
+            <button
+              onClick={handleEmailEnquiry}
+              className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 w-full"
+            >
+              Enquire via Email
+            </button>
+            <button
+              onClick={handleWhatsAppEnquiry}
+              className="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 w-full"
+            >
+              Enquire via WhatsApp
+            </button>
+          </div>
         </div>
       </div>
 
@@ -159,8 +214,12 @@ export default function CarDetails() {
           <h2 className="text-3xl font-bold mb-4">Related Brands</h2>
           <div className="flex gap-4 overflow-x-auto">
             {relatedCars.map((r) => (
-              <Link key={r._id} to={`/cars/${r._id}`} className="min-w-[200px] bg-white rounded-lg shadow-md border">
-                <img src={r.images[0]} className="w-full h-40 object-cover"/>
+              <Link
+                key={r._id}
+                to={`/cars/${r._id}`}
+                className="min-w-[200px] bg-white rounded-lg shadow-md border"
+              >
+                <img src={r.images[0]} className="w-full h-40 object-cover" />
                 <div className="p-3">
                   <h3>{r.carName}</h3>
                   <p className="text-blue-600 font-bold">AED {r.price}</p>
@@ -169,7 +228,9 @@ export default function CarDetails() {
             ))}
           </div>
         </div>
-      ) : <p>No Related Brands Available</p>}
+      ) : (
+        <p>No Related Brands Available</p>
+      )}
     </div>
   );
 }

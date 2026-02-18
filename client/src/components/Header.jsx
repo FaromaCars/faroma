@@ -1,12 +1,27 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from '../assets/faromalogo.png'
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
   const activeClass = "text-blue-600 font-semibold";
   const normalClass = "text-gray-700 hover:text-blue-600";
+  const [wishCount, setWishCount] = useState(0);
+  
+  const loadWishlistCount = () => {
+  const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+  setWishCount(favorites.length);
+};
+
+useEffect(() => {
+  loadWishlistCount();
+
+  window.addEventListener("storage", loadWishlistCount);
+
+  return () => {
+    window.removeEventListener("storage", loadWishlistCount);
+  };
+}, []);
 
   return (
     <header className="bg-white shadow sticky top-0 z-50 p-2">
@@ -18,7 +33,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop Menu */}
-          <nav className="hidden md:flex space-x-6">
+          <nav className="hidden lg:flex space-x-6">
             <NavLink to="/" className={({ isActive }) => isActive ? activeClass : normalClass}>
               Home
             </NavLink>
@@ -34,6 +49,9 @@ export default function Header() {
             <NavLink to="/contact" className={({ isActive }) => isActive ? activeClass : normalClass}>
               Contact
             </NavLink>
+            <NavLink to="/wish-list" className={({ isActive }) => `${isActive ? activeClass : normalClass} flex items-center gap-1` }>
+              Wishlist <span className="bg-red-600 text-white text-sm font-bold flex items-center justify-center w-6 h-6 rounded-full">{wishCount}</span>
+            </NavLink>
             {localStorage.getItem("adminToken") && (
               <NavLink to="/admin/dashboard" className={({ isActive }) => isActive ? activeClass : normalClass}>
               Dashboard
@@ -42,7 +60,7 @@ export default function Header() {
           </nav>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="text-gray-700 hover:text-blue-600 focus:outline-none"
@@ -63,7 +81,7 @@ export default function Header() {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <nav className="md:hidden bg-white shadow">
+        <nav className="lg:hidden bg-white ">
           <NavLink
             to="/"
             onClick={() => setMenuOpen(false)}
@@ -95,13 +113,16 @@ export default function Header() {
           <NavLink
             to="/contact"
             onClick={() => setMenuOpen(false)}
-            className="block px-4 py-2 hover:bg-gray-100"
+            className="block px-4 py-2 border-b hover:bg-gray-100"
           >
             Contact
           </NavLink>
+          <NavLink onClick={() => setMenuOpen(false)} to="/wish-list" className="block border-b px-4 py-2 hover:bg-gray-100 ">
+              Wishlist {wishCount}
+            </NavLink>
 
           {localStorage.getItem("adminToken") && (
-            <NavLink to="/admin/dashboard" className="block px-4 py-2 hover:bg-gray-100">
+            <NavLink onClick={() => setMenuOpen(false)} to="/admin/dashboard" className="block px-4 py-2 hover:bg-gray-100">
               Dashboard
             </NavLink>
         )}
