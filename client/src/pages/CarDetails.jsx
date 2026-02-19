@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import Preloader from "../components/Preloader"; // ✅ Import your preloader
 import { BsHeartFill } from "react-icons/bs";
 import { toast } from "react-toastify";
+import Feedback from "../components/Feedback";
 
 export default function CarDetails() {
   const { id } = useParams();
@@ -130,7 +131,7 @@ export default function CarDetails() {
           <img
             src={mainImage}
             alt={car.carName}
-            className="w-full h-auto lg:h-96 object-cover rounded shadow"
+            className="w-full h-auto lg:h-96 object-full rounded shadow"
           />
           {car.images?.length > 1 && (
             <div className="flex gap-2 overflow-x-auto mt-2 pb-2">
@@ -143,6 +144,7 @@ export default function CarDetails() {
                     img === mainImage ? "border-blue-600" : "border-gray-300"
                   }`}
                   onClick={() => setMainImage(img)}
+                  onMouseEnter={() => setMainImage(img)}
                 />
               ))}
             </div>
@@ -231,6 +233,8 @@ export default function CarDetails() {
       ) : (
         <p>No Related Brands Available</p>
       )}
+
+      <Feedback />
     </div>
   );
 }

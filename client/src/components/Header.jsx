@@ -104,7 +104,7 @@ useEffect(() => {
             Used Cars
           </NavLink>
           <NavLink
-            to="/about"
+            to="/about-us"
             onClick={() => setMenuOpen(false)}
             className="block px-4 py-2 border-b hover:bg-gray-100"
           >
