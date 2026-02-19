@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import background from "../assets/homeBanner1.jpg";
+import background from "../assets/homebanner1.jpg";
 
 export default function Feedback() {
   const [name, setName] = useState("");
