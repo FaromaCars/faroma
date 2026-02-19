@@ -15,6 +15,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import HeaderMarquee from "./components/HeaderMarquee";
 import About from "./pages/About";
 import Wishlist from "./components/Wishlist";
+import Whatsapp from "./components/Whatsapp";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <ToastContainer position="top-right" autoClose={3000} />
         <HeaderMarquee />
         <Header />
+        <Whatsapp />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about-us" element={<About />} />

@@ -105,7 +105,9 @@ export default function CarDetails() {
 
   // ------------------ Render Car Details ------------------
   return (
-    <div className="p-4 md:p-8 container mx-auto space-y-8">
+    <div className=" space-y-8">
+      <div className="p-4 md:p-8 container mx-auto">
+
       {/* Breadcrumbs */}
       <nav className="text-gray-500 text-sm">
         <Link to="/" className="hover:underline">
@@ -234,8 +236,10 @@ export default function CarDetails() {
         <p>No Related Brands Available</p>
       )}
 
-      <Feedback />
     </div>
+      <Feedback />
+  </div>
+
   );
 }
 
