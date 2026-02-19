@@ -4,6 +4,10 @@ import Preloader from "../components/Preloader"; // ✅ Import your preloader
 import { BsHeartFill } from "react-icons/bs";
 import { toast } from "react-toastify";
 import Feedback from "../components/Feedback";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
 
 export default function CarDetails() {
   const { id } = useParams();
@@ -107,139 +111,157 @@ export default function CarDetails() {
   return (
     <div className=" space-y-8">
       <div className="p-4 md:p-8 container mx-auto">
-
-      {/* Breadcrumbs */}
-      <nav className="text-gray-500 text-sm">
-        <Link to="/" className="hover:underline">
-          Home
-        </Link>{" "}
-        /{" "}
-        {car.condition === "NEW" ? (
-          <Link to="/new-cars" className="hover:underline">
-            Cars
-          </Link>
-        ) : (
-          <Link to="/used-cars" className="hover:underline">
-            Cars
-          </Link>
-        )}
-        {" / "}
-        <span className="text-gray-700">{car.carName}</span>
-      </nav>
-
-      <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
-        {/* Images */}
-        <div className="lg:w-1/2 space-y-3 lg:sticky lg:top-32 self-start">
-          <img
-            src={mainImage}
-            alt={car.carName}
-            className="w-full h-auto lg:h-96 object-full rounded shadow"
-          />
-          {car.images?.length > 1 && (
-            <div className="flex gap-2 overflow-x-auto mt-2 pb-2">
-              {car.images.map((img, idx) => (
-                <img
-                  key={idx}
-                  src={img}
-                  alt=""
-                  className={`w-20 h-20 object-cover rounded cursor-pointer border-2 ${
-                    img === mainImage ? "border-blue-600" : "border-gray-300"
-                  }`}
-                  onClick={() => setMainImage(img)}
-                  onMouseEnter={() => setMainImage(img)}
-                />
-              ))}
-            </div>
+        {/* Breadcrumbs */}
+        <nav className="text-gray-500 text-sm">
+          <Link to="/" className="hover:underline">
+            Home
+          </Link>{" "}
+          /{" "}
+          {car.condition === "NEW" ? (
+            <Link to="/new-cars" className="hover:underline">
+              Cars
+            </Link>
+          ) : (
+            <Link to="/used-cars" className="hover:underline">
+              Cars
+            </Link>
           )}
-        </div>
+          {" / "}
+          <span className="text-gray-700">{car.carName}</span>
+        </nav>
 
-        {/* Details */}
-        <div className="lg:w-1/2 bg-white p-6 rounded shadow space-y-6">
-          <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-4xl font-bold">
-                {car.brand} {car.carName}
-              </h1>
-              <span className="bg-gray-200 px-3 py-1 rounded text-sm">
-                {car.condition}
-              </span>
-            </div>
-            {car.price ? (
-              <p className="text-4xl text-blue-600 font-bold mt-3">
-                AED {car.price.toLocaleString()}
-              </p>
-            ) : (
-              <p className="text-4xl text-red-600 font-bold mt-3">Sold Out</p>
+        <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
+          {/* Images */}
+          <div className="lg:w-1/2 space-y-3 lg:sticky lg:top-32 self-start">
+            <img
+              src={mainImage}
+              alt={car.carName}
+              className="w-full h-auto lg:h-96 object-full rounded shadow"
+            />
+            {car.images?.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto mt-2 pb-2">
+                {car.images.map((img, idx) => (
+                  <img
+                    key={idx}
+                    src={img}
+                    alt=""
+                    className={`w-20 h-20 object-cover rounded cursor-pointer border-2 ${
+                      img === mainImage ? "border-blue-600" : "border-gray-300"
+                    }`}
+                    onClick={() => setMainImage(img)}
+                    onMouseEnter={() => setMainImage(img)}
+                  />
+                ))}
+              </div>
             )}
           </div>
 
-          {/* Specs */}
-          <div className="grid grid-cols-2 gap-4">
-            <Spec title="Brand" value={car.brand} />
-            <Spec title="Year" value={car.year} />
-            <Spec title="Mileage" value={`${car.kilometer} km`} />
-            <Spec title="Fuel" value={car.fuelType} />
-            <Spec title="Type" value={car.vehicleType} />
-            <Spec title="Transmission" value={car.transmission} />
-            <Spec title="Seating" value={car.seating} />
-            <Spec title="Color" value={car.color} />
-            <p className="text-gray-700 mt-3">{car.description}</p> <br />
-            <div
-              onClick={toggleFunction}
-              className={`${isFavorite ? "text-green-600" : "text-red-600"} flex items-center justify-start font-semibold gap-2 w-full cursor-pointer`}
-            >
-              <p>{isFavorite ? "Remove from Wishlist" : "Add to Wishlist"}</p>
-              <BsHeartFill />
+          {/* Details */}
+          <div className="lg:w-1/2 bg-white p-6 rounded shadow space-y-6">
+            <div>
+              <div className="flex justify-start items-center gap-3">
+                <h1 className="text-3xl md:text-4xl font-bold">
+                  {car.brand} {car.carName}
+                </h1>
+                <span className="bg-gray-200 px-3 py-1 rounded text-sm">
+                  {car.condition}
+                </span>
+              </div>
+              {car.price ? (
+                <p className="text-3xl md:text-4xl text-blue-600 font-bold mt-3">
+                  AED {car.price.toLocaleString()}
+                </p>
+              ) : (
+                <p className="text-3xl md:text-4xl text-red-600 font-bold mt-3">
+                  Sold Out
+                </p>
+              )}
+            </div>
+
+            {/* Specs */}
+            <div className="grid grid-cols-2 gap-4">
+              <Spec title="Brand" value={car.brand} />
+              <Spec title="Year" value={car.year} />
+              <Spec title="Mileage" value={`${car.kilometer} km`} />
+              <Spec title="Fuel" value={car.fuelType} />
+              <Spec title="Type" value={car.vehicleType} />
+              <Spec title="Transmission" value={car.transmission} />
+              <Spec title="Seating" value={car.seating} />
+              <Spec title="Color" value={car.color} />
+              <p className="text-gray-700 mt-3">{car.description}</p> <br />
+              <div
+                onClick={toggleFunction}
+                className={`${isFavorite ? "text-green-600" : "text-red-600"} text-sm md:text-base flex items-center justify-start font-semibold gap-2 w-full cursor-pointer`}
+              >
+                <p>{isFavorite ? "Remove from Wishlist" : "Add to Wishlist"}</p>
+                <BsHeartFill />
+              </div>
+            </div>
+
+            {/* Buttons */}
+
+            <div className="flex flex-col lg:flex-row gap-6">
+              <button
+                onClick={handleEmailEnquiry}
+                className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 w-full"
+              >
+                Enquire via Email
+              </button>
+              <button
+                onClick={handleWhatsAppEnquiry}
+                className="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 w-full"
+              >
+                Enquire via WhatsApp
+              </button>
             </div>
           </div>
-
-          {/* Buttons */}
-
-          <div className="flex flex-col lg:flex-row gap-6">
-            <button
-              onClick={handleEmailEnquiry}
-              className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 w-full"
-            >
-              Enquire via Email
-            </button>
-            <button
-              onClick={handleWhatsAppEnquiry}
-              className="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 w-full"
-            >
-              Enquire via WhatsApp
-            </button>
-          </div>
         </div>
-      </div>
 
-      {/* Related Cars */}
-      {relatedCars.length ? (
-        <div>
-          <h2 className="text-3xl font-bold mb-4">Related Brands</h2>
-          <div className="flex gap-4 overflow-x-auto">
-            {relatedCars.map((r) => (
-              <Link
-                key={r._id}
-                to={`/cars/${r._id}`}
-                className="min-w-[200px] bg-white rounded-lg shadow-md border"
+        {/* Related Cars */}
+        {relatedCars.length ? (
+          <div>
+            <h2 className="text-3xl font-bold mb-4 mt-4">Related Brands</h2>
+              <Swiper
+                modules={[Navigation, Autoplay]}
+                spaceBetween={20}
+                navigation
+                speed={2000}
+                loop={true}
+                allowTouchMove={true}
+                autoplay={{ delay: 1000, disableOnInteraction: false }}
+                breakpoints={{
+                  0: { slidesPerView: 2 },
+                  640: { slidesPerView: 2 },
+                  1024: { slidesPerView: 3 },
+                  1240: { slidesPerView: 4 },
+                }}
+                className="carSwiper"
               >
-                <img src={r.images[0]} className="w-full h-40 object-cover" />
-                <div className="p-3">
-                  <h3>{r.carName}</h3>
-                  <p className="text-blue-600 font-bold">AED {r.price}</p>
-                </div>
-              </Link>
-            ))}
+                {relatedCars.map((r) => (
+                  <SwiperSlide key={r._id}>
+                    <Link
+                      to={`/cars/${r._id}`}
+                      className="rounded-xl shadow-2xl"
+                    >
+                      <img
+                        src={r.images[0]}
+                        className="w-full h-52 object-fill"
+                      />
+                      <div className="p-3">
+                        <h3>{r.carName}</h3>
+                        <p className="text-blue-600 font-bold">AED {r.price}</p>
+                      </div>
+                    </Link>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
           </div>
-        </div>
-      ) : (
-        <p>No Related Brands Available</p>
-      )}
-
-    </div>
+        ) : (
+          <p>No Related Brands Available</p>
+        )}
+      </div>
       <Feedback />
-  </div>
-
+    </div>
   );
 }
 

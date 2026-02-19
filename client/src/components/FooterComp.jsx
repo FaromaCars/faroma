@@ -1,8 +1,16 @@
 import { Link } from "react-router-dom";
 import { BsFacebook, BsInstagram, BsTwitterX } from "react-icons/bs";
 import logowhite from "../assets/faromalogo white.png";
+import { useEffect, useState } from "react";
 
 export default function FooterCom() {
+
+  const [year, setYear] = useState("")
+  useEffect(()=>{
+    const getYear = new Date().getFullYear()
+    setYear(getYear)
+  },[])
+
   return (
     <footer className="bg-gray-800 border-t-8 border-black text-white">
       <div className="container mx-auto px-4 py-8">
@@ -77,7 +85,7 @@ export default function FooterCom() {
 
         {/* Footer Bottom */}
         <div className="flex flex-col md:flex-row items-center justify-between mt-4 gap-4">
-          <p className="text-sm">&copy; 2026 Faroma Cars. All Rights Reserved.</p>
+          <p className="text-sm">&copy; <span>{year}</span> Faroma Cars. All Rights Reserved.</p>
           <p className="text-sm">
             Designed By{" "}
             <a href="https://bright-uae.com" target="_blank" className="text-white font-semibold hover:underline">Bright Solution Computer</a>
