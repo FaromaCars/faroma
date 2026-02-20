@@ -278,6 +278,7 @@ export default function Dashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
+    window.dispatchEvent(new Event("authChanged"));
     toast.success("Logged out successfully");
     navigate("/", { replace: true });
   };

@@ -6,7 +6,8 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [wishCount, setWishCount] = useState(0);
   const menuRef = useRef();
-
+  const [isAdmin, setIsAdmin] = useState(
+  !!localStorage.getItem("adminToken"));
   const activeClass = "text-blue-600 font-semibold";
   const normalClass = "text-gray-700 hover:text-blue-600";
 
@@ -21,6 +22,18 @@ export default function Header() {
     window.addEventListener("storage", loadWishlistCount);
     return () => window.removeEventListener("storage", loadWishlistCount);
   }, []);
+
+  useEffect(() => {
+  const syncAuth = () => {
+    setIsAdmin(!!localStorage.getItem("adminToken"));
+  };
+
+  window.addEventListener("authChanged", syncAuth);
+
+  return () => {
+    window.removeEventListener("authChanged", syncAuth);
+  };
+}, []);
 
   // Close when clicking outside drawer
   useEffect(() => {
@@ -65,11 +78,11 @@ export default function Header() {
               </span>
             </NavLink>
 
-            {localStorage.getItem("adminToken") && (
+            {isAdmin  ? (
               <NavLink to="/admin/dashboard" className={({ isActive }) => isActive ? activeClass : normalClass}>
                 Dashboard
               </NavLink>
-            )}
+            ) : ""}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -141,12 +154,12 @@ export default function Header() {
             </span>
           </NavLink>
 
-          {localStorage.getItem("adminToken") && (
+          {isAdmin  ? (
             <NavLink to="/admin/dashboard" onClick={() => setMenuOpen(false)}
               className={({ isActive }) => `${isActive ? "text-blue-600 font-semibold bg-blue-50" : "text-gray-700"} px-4 py-3 border-b`}>
               Dashboard
             </NavLink>
-          )}
+          ) : ""}
         </nav>
       </div>
     </header>

@@ -6,16 +6,15 @@ export default function AdminLogin() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
 
+  // Redirect if already logged in
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
-    if (token) {
-      navigate("/admin/dashboard", { replace: true });
-    }
+    if (token) navigate("/admin/dashboard", { replace: true });
   }, [navigate]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -30,7 +29,10 @@ export default function AdminLogin() {
 
       if (!res.ok) throw new Error(data.message || "Login failed");
 
+      // ✅ Save token and notify Header
       localStorage.setItem("adminToken", data.token);
+      window.dispatchEvent(new Event("authChanged"));
+
       toast.success("Welcome to Dashboard!");
       navigate("/admin/dashboard", { replace: true });
     } catch (err) {
@@ -41,7 +43,9 @@ export default function AdminLogin() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
       <div className="bg-gray-800/90 backdrop-blur-md p-8 rounded-2xl shadow-2xl w-96 text-white">
-        <h1 className="text-3xl font-bold mb-6 text-center tracking-wide">Admin Login</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center tracking-wide">
+          Admin Login
+        </h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
@@ -71,7 +75,8 @@ export default function AdminLogin() {
         </form>
 
         <div className="mt-6 text-center text-gray-400 text-sm">
-          Designed for <span className="text-blue-400 font-medium">Car Management</span> Admins
+          Designed for{" "}
+          <span className="text-blue-400 font-medium">Car Management</span> Admins
         </div>
       </div>
     </div>
