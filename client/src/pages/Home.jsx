@@ -79,7 +79,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row gap-5">
             <Link
               to="/new-cars"
-              className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300"
+              className="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-300"
             >
               Browse New Cars
             </Link>
@@ -207,37 +207,37 @@ export default function Home() {
 
       {/* Car Types */}
       <h2 className="text-2xl md:text-4xl font-semibold mb-3 text-center text-gray-700">
-                We Provide All Type of Vehicles
-              </h2>
+        Vehicle Types We Provide
+      </h2>
               
-              <span className="block w-40 h-1 bg-gray-700 mx-auto rounded mb-6"></span>
-              <Swiper
-                modules={[Navigation, Autoplay]}
-                spaceBetween={20}
-                navigation
-                speed={4000}
-                loop={true}
-                allowTouchMove={true}
-                autoplay={{ delay: false, disableOnInteraction: false }}
-                breakpoints={{
-                  0: { slidesPerView: 2 },
-                  640: { slidesPerView: 4 },
-                  1024: { slidesPerView: 5 },
-                }}
-                className="carSwiper container"
-              >
-                {Vehicles.map((vehicle) => (
-                  <SwiperSlide key={vehicle._id}>
-                    <div className="p-4 rounded-xl transition duration-300 bg-white block">
-                      <img
-                        src={vehicle.image || "/placeholder.png"}
-                        className="rounded-lg w-auto "
-                      />
-                      <p className="text-center font-semibold text-xl">{vehicle.name}</p>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+      <span className="block w-40 h-1 bg-gray-700 mx-auto rounded mb-6"></span>
+      <Swiper
+        modules={[Navigation, Autoplay]}
+        spaceBetween={20}
+        navigation={true}
+        speed={4000}
+        loop={true}
+        allowTouchMove={true}
+        autoplay={{ delay: 1000, disableOnInteraction: false }}
+        breakpoints={{
+          0: { slidesPerView: 2 },
+          640: { slidesPerView: 4 },
+          1024: { slidesPerView: 5 },
+        }}
+        className="carSwiper container"
+      >
+        {Vehicles.map((vehicle) => (
+          <SwiperSlide key={vehicle._id}>
+            <div className="p-4 rounded-xl transition duration-300 bg-white block">
+              <img
+                src={vehicle.image || "/placeholder.png"}
+                className="rounded-lg w-auto "
+              />
+              <p className="text-center font-semibold text-xl">{vehicle.name}</p>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
       {/* Car Types End */}
 
@@ -288,7 +288,7 @@ export default function Home() {
           speed={3000}
           loop={true}
           allowTouchMove={true}
-          autoplay={{ delay: false, disableOnInteraction: false }}
+          autoplay={{ delay: 1000, disableOnInteraction: false }}
           breakpoints={{
             0: { slidesPerView: 2 },
             640: { slidesPerView: 4 },

@@ -79,7 +79,7 @@ const HomeReview = () => {
       >
         {review.map((item, index) => (
           <SwiperSlide key={item._id} className="p-4">
-            <div className="bg-white shadow-xl hover:shadow-2xl transition duration-300 rounded-2xl p-6 h-full flex flex-col justify-between">
+            <div className="bg-white shadow-xl transition duration-300 rounded-2xl p-6 h-full flex flex-col justify-between">
               {/* 🌈 Dynamic Quote icon */}
               <div
                 className={`bg-gradient-to-r ${

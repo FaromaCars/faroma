@@ -10,6 +10,8 @@ import car9 from '../assets/Vehicle/truck.png'
 import car10 from '../assets/Vehicle/van.png'
 import car11 from '../assets/Vehicle/bike.png'
 import car12 from '../assets/Vehicle/ambulance.png'
+import car13 from '../assets/Vehicle/security.png'
+import car14 from '../assets/Vehicle/bus.png'
 
 export const Vehicles = [
     {id:6,image:car6,name:"Sedan"},
@@ -24,5 +26,7 @@ export const Vehicles = [
     {id:5,image:car5,name:"Sports Car"},
     {id:1,image:car1,name:"Armored Vehicle"},
     {id:12,image:car12,name:"Ambulance"},
+    {id:13,image:car13,name:"Security Vehicle"},
+    {id:14,image:car14,name:"Bus"},
 
 ]

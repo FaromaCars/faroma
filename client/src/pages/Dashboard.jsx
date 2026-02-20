@@ -354,6 +354,8 @@ export default function Dashboard() {
                   <option value="Sedan">Sedan</option>
                   <option value="Sports Car">Sports Car</option>
                   <option value="Ambulance">Ambulance</option>
+                  <option value="Security Vehicle">Security Vehicle</option>
+                  <option value="Bus">Bus</option>
                 </select>
                 <select name="fuelType" value={form.fuelType} onChange={handleChange} className="border p-2 rounded">
                   <option value="">Select Fuel Type</option>

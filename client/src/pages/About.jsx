@@ -70,7 +70,7 @@ export default function AboutUs() {
       </section>
 
         <h2 className="text-2xl md:text-4xl font-semibold mb-3 text-center text-gray-700">
-          We Provide All Type of Vehicles
+          Type of Vehicles We Provide
         </h2>
 
         <span className="block w-40 h-1 bg-gray-700 mx-auto rounded mb-6"></span>
@@ -81,7 +81,7 @@ export default function AboutUs() {
           speed={4000}
           loop={true}
           allowTouchMove={true}
-          autoplay={{ delay: false, disableOnInteraction: false }}
+          autoplay={{ delay: 1000, disableOnInteraction: false }}
           breakpoints={{
             0: { slidesPerView: 2 },
             640: { slidesPerView: 4 },
