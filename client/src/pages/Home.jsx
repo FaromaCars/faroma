@@ -69,7 +69,7 @@ export default function Home() {
         />
 
         <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-center px-4">
-          <h1 className="text-3xl md:text-6xl font-bold text-white mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
             Find Your Dream Car
           </h1>
           <p className="text-lg md:text-2xl text-gray-200 mb-6">
@@ -79,7 +79,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row gap-5">
             <Link
               to="/new-cars"
-              className="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300"
+              className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300"
             >
               Browse New Cars
             </Link>

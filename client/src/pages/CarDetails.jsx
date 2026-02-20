@@ -98,11 +98,11 @@ export default function CarDetails() {
   const handleEmailEnquiry = () => {
     const subject = encodeURIComponent(`Car Enquiry - ${car.carName}`);
     const body = encodeURIComponent(enquiryMessage);
-    window.location.href = `mailto:sales@faromacars.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:info@faromacars.com?subject=${subject}&body=${body}`;
   };
 
   const handleWhatsAppEnquiry = () => {
-    const phoneNumber = "971502020786"; // 🔴 Your number
+    const phoneNumber = "+971565471333"; // 🔴 Your number
     const message = encodeURIComponent(enquiryMessage);
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
   };
@@ -132,12 +132,19 @@ export default function CarDetails() {
 
         <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
           {/* Images */}
-          <div className="lg:w-1/2 space-y-3 lg:sticky lg:top-32 self-start">
+          <div className="lg:w-1/2 space-y-3 lg:sticky lg:top-32 self-start relative">
             <img
               src={mainImage}
               alt={car.carName}
-              className="w-full h-auto lg:h-96 object-full rounded shadow"
+              className="w-full h-auto lg:h-96 object-full rounded shadow "
             />
+            <div
+                onClick={toggleFunction}
+                className={`${isFavorite ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"} text-xs md:text-sm flex items-center justify-center font-semibold gap-2 cursor-pointer text-white rounded-full py-3 w-32 sm:w-40 absolute top-0 left-2`}
+              >
+                <p>{isFavorite ? "Remove Wishlist" : "Add Wishlist"}</p>
+                <BsHeartFill />
+              </div>
             {car.images?.length > 1 && (
               <div className="flex gap-2 overflow-x-auto mt-2 pb-2">
                 {car.images.map((img, idx) => (
@@ -152,7 +159,9 @@ export default function CarDetails() {
                     onMouseEnter={() => setMainImage(img)}
                   />
                 ))}
+                
               </div>
+              
             )}
           </div>
 
@@ -179,7 +188,7 @@ export default function CarDetails() {
             </div>
 
             {/* Specs */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-2">
               <Spec title="Brand" value={car.brand} />
               <Spec title="Year" value={car.year} />
               <Spec title="Mileage" value={`${car.kilometer} km`} />
@@ -189,13 +198,7 @@ export default function CarDetails() {
               <Spec title="Seating" value={car.seating} />
               <Spec title="Color" value={car.color} />
               <p className="text-gray-700 mt-3">{car.description}</p> <br />
-              <div
-                onClick={toggleFunction}
-                className={`${isFavorite ? "text-green-600" : "text-red-600"} text-sm md:text-base flex items-center justify-start font-semibold gap-2 w-full cursor-pointer`}
-              >
-                <p>{isFavorite ? "Remove from Wishlist" : "Add to Wishlist"}</p>
-                <BsHeartFill />
-              </div>
+              
             </div>
 
             {/* Buttons */}
@@ -230,7 +233,7 @@ export default function CarDetails() {
                 allowTouchMove={true}
                 autoplay={{ delay: 1000, disableOnInteraction: false }}
                 breakpoints={{
-                  0: { slidesPerView: 2 },
+                  0: { slidesPerView: 1 },
                   640: { slidesPerView: 2 },
                   1024: { slidesPerView: 3 },
                   1240: { slidesPerView: 4 },

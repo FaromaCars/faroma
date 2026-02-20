@@ -45,8 +45,8 @@ export default function Feedback() {
         <div className="absolute inset-0 bg-black opacity-60"></div>
       <div className="relative mx-0 lg:mx-20 z-10 w-full flex flex-col md:flex-row items-stretch justify-center p-8 lg:gap-10">
         <div className="flex-1 text-white max-w-xl flex flex-col justify-center">
-          <span className="bg-white/10 px-4 py-1 w-fit rounded-full text-sm tracking-wide backdrop-blur">
-            FAROMA MOTOR TRADING LLC
+          <span className="bg-white/10 px-4 py-1 w-fit rounded-full text-sm tracking-wide backdrop-blur text-center">
+            FAROMA MOTOR TRADING INTERNATIONAL LLC
           </span>
 
           <h1 className="text-4xl md:text-5xl font-bold leading-tight mt-6 mb-6">

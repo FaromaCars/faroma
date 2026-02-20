@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import error from '../assets/emptywishlist.png'
 
 const Wishlist = () => {
   const [wishList, setWishList] = useState([]);
@@ -22,14 +23,18 @@ const Wishlist = () => {
 
   if (!wishList.length)
     return (
-      <h2 className="text-center mt-10 text-2xl min-h-screen container">
-        Wishlist is empty 💔
-      </h2>
+      <div className='min-h-full 2xl:min-h-screen container mx-auto py-20'>
+        <div className='flex flex-col  items-center'>
+            <img src={error} alt="Empty" className='w-auto lg:h-72 xl:h-96 p-3'/>
+            <p className='text-red-600 font-bold text-2xl md:text-3xl xl:text-4xl'>Wishlist is Empty </p>
+            <p className='text-gray-600 font-bold text-lg md:text-2xl pt-2'>Add Products to View Wishlist</p>
+        </div>
+    </div>
     );
 
   return (
     <div className="min-h-screen p-6 container mx-auto">
-      <h1 className="text-3xl font-bold mb-6">My Wishlist ❤️</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-700">My Wishlist </h1>
       
       <div className="overflow-x-auto">
       <table className="w-full border overflow-auto">
@@ -53,7 +58,7 @@ const Wishlist = () => {
                   className="sm:w-24 sm:h-16 object-cover rounded mx-auto"
                   />
               </td>
-              <td className="p-3">{item.carName} {item.brand}</td>
+              <td className="p-3">{item.brand} {item.carName} </td>
               <td className="p-3">{item.condition}</td>
               <td className="p-3">AED {item.price}</td>
               <td className="p-3">

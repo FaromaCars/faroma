@@ -37,7 +37,7 @@ function Whatsapp() {
           rel="noopener noreferrer"
           className="bg-green-500 hover:bg-green-600 p-3 md:p-4 rounded-full shadow-lg transition"
         >
-          <BsWhatsapp className="text-white w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
+          <BsWhatsapp className="text-white w-5 h-5 md:w-6 md:h-6 lg:w-6 lg:h-6" />
         </a>
 
         {/* Call */}
@@ -45,7 +45,7 @@ function Whatsapp() {
           href="tel:+971565471333"
           className="bg-blue-500 hover:bg-blue-600 p-3 md:p-4 rounded-full shadow-lg transition"
         >
-          <BsTelephone className="text-white w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
+          <BsTelephone className="text-white w-5 h-5 md:w-6 md:h-6 lg:w-6 lg:h-6" />
         </a>
 
         {/* Share */}
@@ -53,7 +53,7 @@ function Whatsapp() {
           onClick={handleShare}
           className="bg-gray-500 hover:bg-gray-600 p-3 md:p-4 rounded-full shadow-lg transition"
         >
-          <BsShare className="text-white w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
+          <BsShare className="text-white w-5 h-5 md:w-6 md:h-6 lg:w-6 lg:h-6" />
         </button>
       </div>
 
@@ -61,11 +61,11 @@ function Whatsapp() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`${
-          isOpen ? "bg-red-600 rotate-90" : "bg-green-600 animate-bounce"
-        } p-3 md:p-5 rounded-full shadow-xl transition-all duration-300`}
+          isOpen ? "bg-red-600 " : "bg-green-600 animate-bounce"
+        } p-3 md:p-5 rounded-full  transition-all duration-300`}
       >
         {isOpen ? (
-          <BsX className="text-white w-5 h-5 md:w-6 md:h-6" />
+          <BsX className="text-white w-5 h-5 md:w-5 md:h-6" />
         ) : (
           <IoMdSettings className="text-white w-5 h-5 md:w-6 md:h-6 animate-spin" />
         )}
