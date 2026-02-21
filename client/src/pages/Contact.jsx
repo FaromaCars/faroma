@@ -70,7 +70,6 @@ export default function Contact() {
           enquiry,
           message,
           feedback,
-          enquiryType: "General Enquiry"
         }),
       });
 

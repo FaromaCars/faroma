@@ -62,7 +62,6 @@ export default function Feedback() {
           enquiry,
           message,
           feedback,
-          enquiryType: "General Enquiry"
         }),
       });
 
