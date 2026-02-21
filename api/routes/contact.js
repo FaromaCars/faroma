@@ -4,18 +4,24 @@ import nodemailer from "nodemailer";
 const router = express.Router();
 
 // Nodemailer Gmail transporter
-  const transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  port: 587,       // use 587 for cloud servers
+  secure: false,   // false for TLS
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_PASS,
-    logger: true,
-    debug: true,     // your Gmail App Password (or regular password if using less secure apps)
   },
 });
 
+// Verify transporter on server start
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("SMTP Error:", error);
+  } else {
+    console.log("SMTP Ready ✅");
+  }
+});
 
 router.post("/send-email", async (req, res) => {
   const {
@@ -66,7 +72,6 @@ router.post("/send-email", async (req, res) => {
         <p><strong>Link:</strong> <a href="${link}">${link}</a></p>
       `;
     } else if (enquiryType === "General Enquiry") {
-      // fallback for generic contact
       subject = "Contact Form from Faroma Website";
       htmlBody = `
         <h2>Contact Form Submission</h2>
@@ -81,16 +86,18 @@ router.post("/send-email", async (req, res) => {
 
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
-      to: "faromacars@gmail.com", // your receiving email
+      to: "faromacars@gmail.com", // receiving email
       subject,
       html: htmlBody,
-      replyTo: email, // reply directly to user
+      replyTo: email,
     });
 
     res.status(200).json({ message: "Email sent successfully" });
   } catch (err) {
-    console.error("Nodemailer Error:", err);
-    res.status(500).json({ message: "Failed to send email" });
+    console.error("FULL ERROR:", err);
+    console.error("ERROR MESSAGE:", err.message);
+    console.error("ERROR CODE:", err.code);
+    res.status(500).json({ message: `Failed to send email: ${err.message}` });
   }
 });
 
