@@ -34,8 +34,8 @@ router.post("/send-email", async (req, res) => {
     // ✅ Create transporter
     const transporter = nodemailer.createTransport({
       host: "mail.faromamti.com", // HostGator SMTP
-      port: 465,
-      secure: true,
+      port: 587,
+      secure: false,
       auth: {
         user: process.env.EMAIL_USER, // info@faromamti.com
         pass: process.env.EMAIL_PASS, // email password
