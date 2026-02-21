@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
+import { toast } from "react-toastify";
 
 export default function Contact() {
   const [name, setName] = useState("");
@@ -10,8 +11,9 @@ export default function Contact() {
   const [message, setMessage] = useState("");
   const [feedback, setFeedback] = useState("");
   const [errors, setErrors] = useState({});
+  const [phone, setPhone] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleWhatsapp = (e) => {
     e.preventDefault();
 
     const newErrors = {};
@@ -28,7 +30,7 @@ export default function Contact() {
     const whatsappNumber = "+971565471333";
 
     const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-      whatsappMessage
+      whatsappMessage,
     )}`;
 
     window.open(whatsappURL, "_blank");
@@ -38,6 +40,56 @@ export default function Contact() {
     setEnquiry("");
     setMessage("");
     setFeedback("");
+  };
+
+  const handleEmailSend = async (e) => {
+    e.preventDefault();
+
+    const newErrors = {};
+
+    if (!name) newErrors.name = "Name is required";
+    if (!email) newErrors.email = "Email is required";
+    if (!enquiry) newErrors.enquiry = "Enquiry about is required";
+    if (!phone) newErrors.phone = "Phone Number is required";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/contact/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          enquiry,
+          message,
+          feedback,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success("Email sent successfully!");
+        setName("");
+        setEmail("");
+        setPhone("");
+        setEnquiry("New Cars");
+        setMessage("");
+        setFeedback("");
+      } else {
+        toast.success(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
   };
 
   return (
@@ -54,7 +106,6 @@ export default function Contact() {
         <div className="flex flex-col-reverse lg:flex-row p-1">
           {/* Contact Info */}
           <div className="flex flex-col mt-4 lg:ms-10 justify-center">
-
             {/* Location */}
             <div className="bg-gray-50 p-8 m-5 shadow-lg rounded-md ">
               <div className="flex flex-col md:flex-row items-center  gap-5">
@@ -63,7 +114,8 @@ export default function Contact() {
                 </div>
                 <div className="text-center">
                   <p className="text-sm md:text-base">
-                    Meydan Grandstand - 6th Floor Al Meydan Rd <br /> Nadd Al Shiba First - Dubai
+                    Meydan Grandstand - 6th Floor Al Meydan Rd <br /> Nadd Al
+                    Shiba First - Dubai
                   </p>
                   <p className="text-gray-500 text-sm mt-1">Our Location</p>
                 </div>
@@ -77,10 +129,7 @@ export default function Contact() {
                   <FaPhoneAlt className="w-6 h-6 text-white" />
                 </div>
                 <div className="text-center">
-                  <a
-                    href="tel:+971565471333"
-                    className="block hover:underline"
-                  >
+                  <a href="tel:+971565471333" className="block hover:underline">
                     +971 56 547 1333
                   </a>
                   <p className="text-gray-500 text-sm mt-1">Let's Talk</p>
@@ -109,7 +158,7 @@ export default function Contact() {
 
           {/* Contact Form */}
           <div className="flex-1 bg-gray-50 p-8 m-5 shadow-lg rounded-md text-start">
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <form className="flex flex-col gap-5">
               <h2 className="text-gray-700 text-2xl font-semibold">
                 Enquire Now
               </h2>
@@ -154,6 +203,27 @@ export default function Contact() {
                 )}
               </div>
 
+              {/* Phone */}
+              <div className="flex flex-col gap-1 mt-3 md:mt-0">
+                <label className="text-sm font-medium text-gray-600">
+                  Your Phone *
+                </label>
+                <input
+                  type="number"
+                  placeholder="Eg: +971 2233 4455"
+                  id="phone"
+                  value={phone}
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                    setErrors({ ...errors, phone: "" });
+                  }}
+                  className="px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black/80 transition [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-moz-number-spin-button]:appearance-none"
+                />
+                {errors.phone && (
+                  <p className="text-red-500 text-sm">{errors.phone}</p>
+                )}
+              </div>
+
               {/* Enquiry */}
               <div>
                 <label className="block mb-1 text-sm font-medium">
@@ -173,9 +243,7 @@ export default function Contact() {
                   <option value="Other">Other</option>
                 </select>
                 {errors.enquiry && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.enquiry}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{errors.enquiry}</p>
                 )}
               </div>
 
@@ -199,13 +267,15 @@ export default function Contact() {
 
               {/* Button */}
               <button
-                type="submit"
-                className="bg-green-600 text-white py-2 rounded-lg hover:bg-gray-800 transition font-semibold"
+                type="button"
+                onClick={handleWhatsapp}
+                className="bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition font-semibold"
               >
                 Send Via Whatsapp
               </button>
               <button
-                type="submit"
+                type="button"
+                onClick={handleEmailSend}
                 className="bg-gray-700 text-white py-2 rounded-lg hover:bg-gray-800 transition font-semibold"
               >
                 Send Via Email
@@ -216,7 +286,15 @@ export default function Contact() {
 
         {/* Google Map */}
         <div className="p-1">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.3725400055223!2d55.3005168!3d25.156895799999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f69270f5612c3%3A0x2d7e43041843e7d8!2sMeydan%20Free%20Zone%20-%20Business%20Setup%20In%20Dubai%2C%20UAE!5e0!3m2!1sen!2sae!4v1771656077346!5m2!1sen!2sae" width="100%" height="450" style={{"border":0}} allowFullScreen="" loading="lazy" className="rounded-xl"></iframe>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.3725400055223!2d55.3005168!3d25.156895799999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f69270f5612c3%3A0x2d7e43041843e7d8!2sMeydan%20Free%20Zone%20-%20Business%20Setup%20In%20Dubai%2C%20UAE!5e0!3m2!1sen!2sae!4v1771656077346!5m2!1sen!2sae"
+            width="100%"
+            height="450"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+            className="rounded-xl"
+          ></iframe>
         </div>
       </div>
     </div>

@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 import background from "../assets/homebanner1.jpg";
+import { toast } from "react-toastify";
 
 export default function Feedback() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [enquiry, setEnquiry] = useState("New Cars");
   const [message, setMessage] = useState("");
   const [feedback, setFeedback] = useState("");
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleWhatsapp = (e) => {
     e.preventDefault();
 
     const newErrors = {};
 
     if (!name) newErrors.name = "Name is required";
     if (!email) newErrors.email = "Email is required";
+    if (!phone) newErrors.phone = "Phone Number is required";
     if (!enquiry) newErrors.enquiry = "Enquiry about is required";
 
     if (Object.keys(newErrors).length > 0) {
@@ -32,10 +35,61 @@ export default function Feedback() {
     window.open(whatsappURL, "_blank");
     setName("");
     setEmail("");
+    setPhone("");
     setEnquiry("");
     setMessage("");
     setFeedback("");
   };
+
+  const handleEmailSend = async (e) => {
+  e.preventDefault();
+
+  const newErrors = {};
+
+  if (!name) newErrors.name = "Name is required";
+  if (!email) newErrors.email = "Email is required";
+  if (!enquiry) newErrors.enquiry = "Enquiry about is required";
+  if (!phone) newErrors.phone = "Phone Number is required";
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/contact/send-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        phone,
+        enquiry,
+        message,
+        feedback,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      toast.success("Email sent successfully!");
+      setName("");
+      setEmail("");
+      setPhone("");
+      setEnquiry("New Cars");
+      setMessage("");
+      setFeedback("");
+    } else {
+      toast.success(data.message);
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error("Something went wrong");
+  }
+};
 
   return (
     <div
@@ -43,7 +97,7 @@ export default function Feedback() {
       style={{ backgroundImage: `url(${background})` }}
     >
         <div className="absolute inset-0 bg-black opacity-60"></div>
-      <div className="relative mx-0 lg:mx-20 z-10 w-full flex flex-col md:flex-row items-stretch justify-center p-8 lg:gap-10">
+      <div className="relative lg:mx-20 z-10 w-full flex flex-col lg:flex-row mx-auto items-center justify-center p-8 lg:gap-10">
         <div className="flex-1 text-white max-w-xl flex flex-col justify-center">
           <span className="bg-white/10 px-4 py-1 w-fit rounded-full text-sm tracking-wide backdrop-blur text-center">
             FAROMA MOTOR TRADING INTERNATIONAL LLC
@@ -80,7 +134,7 @@ export default function Feedback() {
         </div>
 
         <div className="flex-1 backdrop-blur-lg bg-white/90 shadow-2xl rounded-3xl p-6 md:p-10 max-w-xl w-full flex flex-col justify-center">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <form className="flex flex-col gap-6">
             <div>
               <h1 className="text-3xl font-bold text-gray-800 mb-1">
                 Enquire Now
@@ -110,7 +164,7 @@ export default function Feedback() {
             </div>
 
             {/* EMAIL */}
-            <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-gray-600">
                 Your Email *
               </label>
@@ -128,6 +182,27 @@ export default function Feedback() {
               />
               {errors.email && (
                 <p className="text-red-500 text-sm">{errors.email}</p>
+              )}
+            </div>
+
+            {/* PHONE */}
+            <div className="flex flex-col gap-1 mt-3 md:mt-0">
+              <label className="text-sm font-medium text-gray-600">
+                Your Phone *
+              </label>
+              <input
+                type="number"
+                placeholder="Eg: +971 2233 4455"
+                id="phone"
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                  setErrors({ ...errors, phone: "" });
+                }}
+                className="px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black/80 transition [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-moz-number-spin-button]:appearance-none"
+              />
+              {errors.phone && (
+                <p className="text-red-500 text-sm">{errors.phone}</p>
               )}
             </div>
 
@@ -186,13 +261,15 @@ export default function Feedback() {
 
             {/* BUTTON */}
             <button
-              type="submit"
+              type="button"
+              onClick={handleWhatsapp}
               className="mt-2 bg-green-600 text-white py-3 rounded-xl font-semibold tracking-wide hover:scale-[1.02] hover:shadow-xl active:scale-[0.98] transition duration-300"
             >
               Send Message via WhatsApp →
             </button>
             <button
-              type="submit"
+              type="button"
+              onClick={handleEmailSend}
               className=" bg-gray-700 text-white py-3 rounded-xl font-semibold tracking-wide hover:scale-[1.02] hover:shadow-xl active:scale-[0.98] transition duration-300"
             >
               Send Message via Email →

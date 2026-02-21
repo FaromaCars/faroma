@@ -8,6 +8,8 @@ import carRoutes from "./routes/carRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
+import contactRoutes from "./routes/contact.js";
+
 import path from 'path'
 
 const __dirname = path.resolve()
@@ -23,6 +25,7 @@ app.use("/api/cars", carRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/review", reviewRoutes);
+app.use("/api/contact", contactRoutes);
 
 app.use(express.static(path.join(__dirname, '/client/dist')));
 
