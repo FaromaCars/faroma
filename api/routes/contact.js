@@ -4,10 +4,12 @@ import nodemailer from "nodemailer";
 const router = express.Router();
 
 // Nodemailer Gmail transporter
-const transporter = nodemailer.createTransport({
-  service: "gmail",
+  const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
-    user: process.env.GMAIL_USER,       // your Gmail
+    user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_PASS,
     logger: true,
     debug: true,     // your Gmail App Password (or regular password if using less secure apps)
