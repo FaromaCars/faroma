@@ -9,7 +9,8 @@ import adminRoutes from "./routes/adminRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import contactRoutes from "./routes/contact.js";
-
+console.log("GMAIL_USER:", process.env.GMAIL_USER);
+console.log("GMAIL_PASS:", process.env.GMAIL_PASS ? "Loaded ✅" : "Not Loaded ❌");
 import path from 'path'
 
 const __dirname = path.resolve()

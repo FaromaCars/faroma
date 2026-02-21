@@ -8,9 +8,12 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.GMAIL_USER,       // your Gmail
-    pass: process.env.GMAIL_PASS,       // your Gmail App Password (or regular password if using less secure apps)
+    pass: process.env.GMAIL_PASS,
+    logger: true,
+    debug: true,     // your Gmail App Password (or regular password if using less secure apps)
   },
 });
+
 
 router.post("/send-email", async (req, res) => {
   const {
