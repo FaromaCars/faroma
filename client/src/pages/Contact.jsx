@@ -70,6 +70,7 @@ export default function Contact() {
           enquiry,
           message,
           feedback,
+          enquiryType: "General Enquiry"
         }),
       });
 
@@ -80,7 +81,7 @@ export default function Contact() {
         setName("");
         setEmail("");
         setPhone("");
-        setEnquiry("New Cars");
+        setEnquiry("");
         setMessage("");
         setFeedback("");
       } else {
