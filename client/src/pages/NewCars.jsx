@@ -6,7 +6,7 @@ import { BsHeartFill } from "react-icons/bs";
 import { toast } from "react-toastify";
 
 export default function NewCars() {
-  const carsPerPage = 20;
+  const carsPerPage = 18;
 
   // State
   const [cars, setCars] = useState([]);
@@ -163,7 +163,7 @@ export default function NewCars() {
         <h1 className="text-4xl font-bold mb-6">New Cars</h1>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar */}
-          <div className="bg-white p-5 rounded-2xl shadow space-y-4 h-fit lg:sticky top-6">
+          <div className="bg-white p-5 rounded-2xl shadow space-y-4 h-fit lg:sticky top-36">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold">Filters</h2>
               <button onClick={resetFilters} className="text-sm text-red-500">

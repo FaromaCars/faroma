@@ -38,13 +38,16 @@ export default function FooterCom() {
                   <Link to="/used-cars" className="hover:text-gray-300">Used Cars</Link>
                 </li>
                 <li>
+                  <Link to="/wish-list" className="hover:text-gray-300">Wish List</Link>
+                </li>
+                <li>
                   <Link to="/about-us" className="hover:text-gray-300">About Us</Link>
                 </li>
                 <li>
                   <Link to="/car-news" className="hover:text-gray-300">Car News</Link>
                 </li>
                 <li>
-                  <Link to="/contact-us" className="hover:text-gray-300">Contact Us</Link>
+                  <Link to="/contact" className="hover:text-gray-300">Contact Us</Link>
                 </li>
               </ul>
             </div>
@@ -85,7 +88,7 @@ export default function FooterCom() {
 
         {/* Footer Bottom */}
         <div className="flex flex-col md:flex-row items-center justify-between mt-4 gap-4">
-          <p className="text-sm">&copy; <span>{year}</span> Faroma Cars. All Rights Reserved.</p>
+          <p className="text-sm">&copy; <span>{year}</span> Faroma Motor Trading Internation LLC All Rights Reserved.</p>
           <p className="text-sm">
             Designed By{" "}
             <a href="https://bright-uae.com" target="_blank" className="text-white font-semibold hover:underline">Bright Solution Computer</a>

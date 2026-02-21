@@ -17,6 +17,7 @@ import About from "./pages/About";
 import Wishlist from "./components/Wishlist";
 import Whatsapp from "./components/Whatsapp";
 import Missing from "./components/Missing";
+import Contact from "./pages/Contact";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="*" element={<Missing />} />
         <Route path="/about-us" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/wish-list" element={<Wishlist />} />
         <Route path="/cars/:id" element={<CarDetails />} />
         <Route path="/admin" element={<AdminLogin />} />

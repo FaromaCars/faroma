@@ -206,13 +206,13 @@ export default function CarDetails() {
             <div className="flex flex-col lg:flex-row gap-6">
               <button
                 onClick={handleEmailEnquiry}
-                className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 w-full"
+                className="bg-gray-700 text-white px-6 py-3 font-semibold rounded hover:bg-gray-800 w-full"
               >
                 Enquire via Email
               </button>
               <button
                 onClick={handleWhatsAppEnquiry}
-                className="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 w-full"
+                className="bg-green-600 text-white px-6 py-3 font-semibold rounded hover:bg-green-700 w-full"
               >
                 Enquire via WhatsApp
               </button>

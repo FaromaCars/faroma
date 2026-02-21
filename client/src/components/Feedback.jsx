@@ -187,13 +187,13 @@ export default function Feedback() {
             {/* BUTTON */}
             <button
               type="submit"
-              className="mt-2 bg-black text-white py-3 rounded-xl font-semibold tracking-wide hover:scale-[1.02] hover:shadow-xl active:scale-[0.98] transition duration-300"
+              className="mt-2 bg-green-600 text-white py-3 rounded-xl font-semibold tracking-wide hover:scale-[1.02] hover:shadow-xl active:scale-[0.98] transition duration-300"
             >
               Send Message via WhatsApp →
             </button>
             <button
               type="submit"
-              className=" bg-red-600 text-white py-3 rounded-xl font-semibold tracking-wide hover:scale-[1.02] hover:shadow-xl active:scale-[0.98] transition duration-300"
+              className=" bg-gray-700 text-white py-3 rounded-xl font-semibold tracking-wide hover:scale-[1.02] hover:shadow-xl active:scale-[0.98] transition duration-300"
             >
               Send Message via Email →
             </button>
